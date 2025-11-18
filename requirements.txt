@@ -1,0 +1,33 @@
+# ⚠️ DEPRECATED: This file is kept for backwards compatibility only.
+#
+# Please use `uv sync --all-extras` or `pip install -e ".[dev]"` instead.
+# All dependencies are now managed in pyproject.toml.
+#
+# For installation:
+#   uv sync --all-extras  (recommended)
+#   pip install -e ".[dev]"  (traditional)
+
+# Core dependencies
+python-dotenv==1.1.1
+langchain-core==0.3.72
+langchain-google-genai==2.1.8
+langchain==0.3.27
+pydantic==2.11.7
+todoist-api-python
+tzdata
+
+# Web framework
+streamlit>=1.29.0
+
+# HTTP client with retry support
+requests>=2.31.0
+urllib3>=2.0.0
+
+# Testing
+pytest>=7.4.3
+pytest-playwright>=1.56.0
+pytest-mock>=3.12.0
+responses>=0.24.1
+
+# Logging
+structlog>=23.2.0

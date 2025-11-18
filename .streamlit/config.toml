@@ -1,0 +1,19 @@
+[server]
+headless = true
+port = 8501
+address = "localhost"
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+# Bellevue University Brand Colors
+# Primary: Purple (official university purple)
+primaryColor = "#4F3674"
+# Background: Deep black for professional appearance
+backgroundColor = "#000000"
+# Secondary Background: Dark purple
+secondaryBackgroundColor = "#2a1d42"
+# Text: Clean white for maximum readability
+textColor = "#FFFFFF"
+font = "sans serif"
