@@ -22,6 +22,7 @@ import re
 
 import streamlit as st
 import structlog
+
 from app.llm_service import LLMService
 from app.mode import Mode, detect_mode
 from app.task_formatter import format_task_list
@@ -154,9 +155,7 @@ def generate_chat_response(user_message: str) -> str:
             "What would you like to do?"
         )
 
-    if re.search(
-        r"^(good morning|good afternoon|good evening)[\s!?.]*$", message_lower
-    ):
+    if re.search(r"^(good morning|good afternoon|good evening)[\s!?.]*$", message_lower):
         return (
             "Good day! 🌟 Ready to tackle your tasks?\n\n"
             "Tell me what you need to get done, or ask to see your current tasks."
@@ -246,13 +245,9 @@ def handle_retrieve_mode(user_message: str, todoist_client: TodoistClient):
         st.markdown(formatted_tasks)
 
         # Add to chat history
-        st.session_state.messages.append(
-            {"role": "assistant", "content": formatted_tasks}
-        )
+        st.session_state.messages.append({"role": "assistant", "content": formatted_tasks})
 
-        logger.info(
-            "retrieval_completed", task_count=len(tasks), due_date=due_date, label=label
-        )
+        logger.info("retrieval_completed", task_count=len(tasks), due_date=due_date, label=label)
 
     except AuthenticationError as e:
         error_msg = f"🔑 **Authentication Error**\n\n{str(e)}"
@@ -273,9 +268,7 @@ def handle_retrieve_mode(user_message: str, todoist_client: TodoistClient):
         logger.exception("unexpected_error", error=str(e))
 
 
-def handle_user_input(
-    user_message: str, llm_service: LLMService, todoist_client: TodoistClient
-):
+def handle_user_input(user_message: str, llm_service: LLMService, todoist_client: TodoistClient):
     """
     Process user input and create task in Todoist.
 
@@ -301,9 +294,7 @@ def handle_user_input(
 
     # FW-3.3: Detect conversation mode
     detected_mode = detect_mode(user_message)
-    logger.info(
-        "mode_detected", mode=detected_mode.value, message_preview=user_message[:50]
-    )
+    logger.info("mode_detected", mode=detected_mode.value, message_preview=user_message[:50])
 
     # FW-4.3: Route RETRIEVE mode to retrieval handler
     if detected_mode == Mode.RETRIEVE:
@@ -353,9 +344,7 @@ def handle_user_input(
                 st.success(success_msg)
 
                 # Log to chat history
-                st.session_state.messages.append(
-                    {"role": "assistant", "content": success_msg}
-                )
+                st.session_state.messages.append({"role": "assistant", "content": success_msg})
 
                 logger.info(
                     "task_created_successfully",
@@ -367,36 +356,30 @@ def handle_user_input(
             # LLM parsing error
             error_msg = f"❌ **Unable to understand your request**\n\n{str(e)}"
             st.error(error_msg)
-            st.session_state.messages.append(
-                {"role": "assistant", "content": error_msg}
-            )
+            st.session_state.messages.append({"role": "assistant", "content": error_msg})
             logger.warning("task_parsing_failed", error=str(e))
 
         except AuthenticationError as e:
             # API authentication error
             error_msg = f"🔑 **Authentication Error**\n\n{str(e)}"
             st.error(error_msg)
-            st.session_state.messages.append(
-                {"role": "assistant", "content": error_msg}
-            )
+            st.session_state.messages.append({"role": "assistant", "content": error_msg})
             logger.error("authentication_failed", error=str(e))
 
         except TodoistError as e:
             # Todoist API error
             error_msg = f"⚠️ **Todoist Error**\n\n{str(e)}"
             st.error(error_msg)
-            st.session_state.messages.append(
-                {"role": "assistant", "content": error_msg}
-            )
+            st.session_state.messages.append({"role": "assistant", "content": error_msg})
             logger.error("todoist_error", error=str(e))
 
         except Exception as e:
             # Unexpected error
-            error_msg = f"💥 **Unexpected Error**\n\n{str(e)}\n\nPlease try again or check the logs."
-            st.error(error_msg)
-            st.session_state.messages.append(
-                {"role": "assistant", "content": error_msg}
+            error_msg = (
+                f"💥 **Unexpected Error**\n\n{str(e)}\n\nPlease try again or check the logs."
             )
+            st.error(error_msg)
+            st.session_state.messages.append({"role": "assistant", "content": error_msg})
             logger.exception("unexpected_error")
 
 
@@ -472,9 +455,7 @@ def main():
 
     # Chat input
     if prompt := st.chat_input("Describe your task in natural language..."):
-        handle_user_input(
-            prompt, st.session_state.llm_service, st.session_state.todoist_client
-        )
+        handle_user_input(prompt, st.session_state.llm_service, st.session_state.todoist_client)
 
 
 if __name__ == "__main__":

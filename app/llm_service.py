@@ -29,9 +29,7 @@ class TodoistTask(BaseModel):
     on what information to extract and in what format.
     """
 
-    content: str = Field(
-        description="Task title - concise, actionable description (required)"
-    )
+    content: str = Field(description="Task title - concise, actionable description (required)")
 
     description: str | None = Field(
         default="",
@@ -67,9 +65,7 @@ class LLMService:
     Uses structured output parsing to ensure consistent, validated responses.
     """
 
-    def __init__(
-        self, api_key: str, model: str = "gemini-2.5-flash", temperature: float = 0.3
-    ):
+    def __init__(self, api_key: str, model: str = "gemini-2.5-flash", temperature: float = 0.3):
         """
         Initialize LLM service with Google Gemini model.
 
@@ -197,9 +193,7 @@ class LLMService:
 
             Now parse the following user input:"""
 
-        return ChatPromptTemplate.from_messages(
-            [("system", system_message), ("human", "{input}")]
-        )
+        return ChatPromptTemplate.from_messages([("system", system_message), ("human", "{input}")])
 
     def parse_task(self, user_input: str) -> TodoistTask:
         """

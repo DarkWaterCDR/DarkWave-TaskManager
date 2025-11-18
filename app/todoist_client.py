@@ -139,24 +139,18 @@ class TodoistClient:
         The 'url' field provides the canonical link for viewing the task.
         """
         try:
-            response = self.session.post(
-                f"{self.BASE_URL}/tasks", json=task_data, timeout=10
-            )
+            response = self.session.post(f"{self.BASE_URL}/tasks", json=task_data, timeout=10)
             response.raise_for_status()
 
             task = response.json()
-            logger.info(
-                "task_created", task_id=task.get("id"), content=task.get("content")
-            )
+            logger.info("task_created", task_id=task.get("id"), content=task.get("content"))
             return task  # type: ignore[no-any-return]
 
         except requests.exceptions.HTTPError as e:
             self._handle_http_error(e, "create task")
             raise  # _handle_http_error always raises
         except requests.exceptions.Timeout as e:
-            raise TodoistError(
-                "Request to Todoist API timed out. Please try again."
-            ) from e
+            raise TodoistError("Request to Todoist API timed out. Please try again.") from e
         except requests.exceptions.ConnectionError as e:
             raise TodoistError(
                 "Unable to connect to Todoist API. Check your internet connection."
@@ -221,9 +215,7 @@ class TodoistClient:
             params["filter"] = filter_query
 
         try:
-            response = self.session.get(
-                f"{self.BASE_URL}/tasks", params=params, timeout=10
-            )
+            response = self.session.get(f"{self.BASE_URL}/tasks", params=params, timeout=10)
             response.raise_for_status()
 
             tasks = response.json()
@@ -234,9 +226,7 @@ class TodoistClient:
             self._handle_http_error(e, "retrieve tasks")
             raise  # _handle_http_error always raises
         except requests.exceptions.Timeout as e:
-            raise TodoistError(
-                "Request to Todoist API timed out. Please try again."
-            ) from e
+            raise TodoistError("Request to Todoist API timed out. Please try again.") from e
         except requests.exceptions.ConnectionError as e:
             raise TodoistError(
                 "Unable to connect to Todoist API. Check your internet connection."
@@ -262,17 +252,13 @@ class TodoistClient:
             self._handle_http_error(e, "retrieve projects")
             raise  # _handle_http_error always raises
         except requests.exceptions.Timeout as e:
-            raise TodoistError(
-                "Request to Todoist API timed out. Please try again."
-            ) from e
+            raise TodoistError("Request to Todoist API timed out. Please try again.") from e
         except requests.exceptions.ConnectionError as e:
             raise TodoistError(
                 "Unable to connect to Todoist API. Check your internet connection."
             ) from e
 
-    def _handle_http_error(
-        self, error: requests.exceptions.HTTPError, operation: str
-    ) -> None:
+    def _handle_http_error(self, error: requests.exceptions.HTTPError, operation: str) -> None:
         """
         Convert HTTP errors to user-friendly exceptions.
 
@@ -312,9 +298,7 @@ class TodoistClient:
 
         elif status_code == 404:
             # Not found
-            raise TodoistError(
-                "Resource not found. The requested item may have been deleted."
-            )
+            raise TodoistError("Resource not found. The requested item may have been deleted.")
 
         elif status_code == 429:
             # Rate limit exceeded (after retries)

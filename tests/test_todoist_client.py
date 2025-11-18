@@ -9,6 +9,7 @@ from unittest.mock import patch
 import pytest
 import requests
 import responses
+
 from app.todoist_client import (
     AuthenticationError,
     RateLimitError,
@@ -43,10 +44,7 @@ class TestTodoistClient:
         assert result["id"] == "123"
         assert result["content"] == "Test task"
         assert len(responses.calls) == 1
-        assert (
-            responses.calls[0].request.headers["Authorization"]
-            == "Bearer test_token_12345"
-        )
+        assert responses.calls[0].request.headers["Authorization"] == "Bearer test_token_12345"
 
     @responses.activate
     def test_create_task_with_full_details(self, todoist_client):
@@ -170,9 +168,7 @@ class TestTodoistClient:
             status=200,
         )
 
-        tasks = todoist_client.get_tasks(
-            project_id="12345", label="work", filter_query="today"
-        )
+        tasks = todoist_client.get_tasks(project_id="12345", label="work", filter_query="today")
 
         assert len(tasks) == 1
         # Verify query parameters were sent
@@ -248,7 +244,5 @@ class TestTodoistClient:
     def test_session_has_auth_header(self, todoist_client):
         """Test that session includes correct authorization header."""
         assert "Authorization" in todoist_client.session.headers
-        assert (
-            todoist_client.session.headers["Authorization"] == "Bearer test_token_12345"
-        )
+        assert todoist_client.session.headers["Authorization"] == "Bearer test_token_12345"
         assert todoist_client.session.headers["Content-Type"] == "application/json"

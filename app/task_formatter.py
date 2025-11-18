@@ -10,9 +10,7 @@ from typing import Any
 from app.todoist_links import build_task_url
 
 
-def format_task_list(
-    tasks: list[dict[str, Any]], filter_description: str | None = None
-) -> str:
+def format_task_list(tasks: list[dict[str, Any]], filter_description: str | None = None) -> str:
     """
     Format a list of Todoist tasks into markdown for UI display.
 

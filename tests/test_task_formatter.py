@@ -35,9 +35,7 @@ class TestFormatTaskList:
 
     def test_format_single_task_with_due_date(self):
         """Single task with due date shows date emoji."""
-        tasks = [
-            {"id": "1", "content": "Dentist appointment", "due": {"date": "2024-01-15"}}
-        ]
+        tasks = [{"id": "1", "content": "Dentist appointment", "due": {"date": "2024-01-15"}}]
         result = format_task_list(tasks)
 
         assert "- **Dentist appointment** · 📅 2024-01-15" in result

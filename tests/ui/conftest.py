@@ -76,9 +76,7 @@ def streamlit_app():
         print(f"STDOUT: {stdout.decode() if stdout else 'None'}")
         print(f"STDERR: {stderr.decode() if stderr else 'None'}")
         process.terminate()
-        raise RuntimeError(
-            f"Streamlit app failed to start on port {port} within {max_wait}s"
-        )
+        raise RuntimeError(f"Streamlit app failed to start on port {port} within {max_wait}s")
 
     # Additional wait for app to fully initialize
     time.sleep(5)

@@ -7,8 +7,9 @@ Tests task parsing, prompt engineering, and Pydantic validation.
 from unittest.mock import Mock, patch
 
 import pytest
-from app.llm_service import LLMService, TodoistTask
 from pydantic import ValidationError as PydanticValidationError
+
+from app.llm_service import LLMService, TodoistTask
 
 
 @pytest.fixture
@@ -29,9 +30,7 @@ def llm_service():
     with patch("app.llm_service.ChatGoogleGenerativeAI") as mock_llm_class:
         mock_llm = Mock()
         mock_llm_class.return_value = mock_llm
-        service = LLMService(
-            api_key="test_key", model="gemini-2.5-flash", temperature=0.3
-        )
+        service = LLMService(api_key="test_key", model="gemini-2.5-flash", temperature=0.3)
         service.model = mock_llm
         yield service
 
@@ -193,9 +192,7 @@ class TestLLMService:
 
     def test_parse_task_invalid_json(self, llm_service, mock_llm_response):
         """Test handling of invalid JSON from LLM."""
-        llm_service.model.invoke.return_value = mock_llm_response(
-            "This is not valid JSON"
-        )
+        llm_service.model.invoke.return_value = mock_llm_response("This is not valid JSON")
 
         with pytest.raises(ValueError) as exc_info:
             llm_service.parse_task("Test task")

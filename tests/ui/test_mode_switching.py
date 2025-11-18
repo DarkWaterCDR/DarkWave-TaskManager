@@ -17,9 +17,7 @@ from playwright.sync_api import Page
 class TestModeSwitchingUI:
     """UI tests for mode detection and switching in Streamlit app."""
 
-    def test_greeting_to_retrieve_to_create(
-        self, page: Page, streamlit_app, mode_test_context
-    ):
+    def test_greeting_to_retrieve_to_create(self, page: Page, streamlit_app, mode_test_context):
         """
         Scenario 1: User greets, queries tasks, then creates task.
 
@@ -38,9 +36,7 @@ class TestModeSwitchingUI:
         assert (
             mode_test_context.has_greeting_response()
         ), "Expected greeting response with 'Darkwave' or 'Task Manager'"
-        assert (
-            not mode_test_context.has_error_message()
-        ), "Should not show error for greeting"
+        assert not mode_test_context.has_error_message(), "Should not show error for greeting"
 
         # Step 2: Retrieve query (the original bug case)
         mode_test_context.send_message("Show me what's on my todo list.")
@@ -54,13 +50,9 @@ class TestModeSwitchingUI:
         # Step 3: Create task
         mode_test_context.send_message("Buy groceries tomorrow")
         assert mode_test_context.has_task_preview(), "Expected task creation preview"
-        assert (
-            not mode_test_context.has_error_message()
-        ), "Should not show error for task creation"
+        assert not mode_test_context.has_error_message(), "Should not show error for task creation"
 
-    def test_query_to_greeting_to_create(
-        self, page: Page, streamlit_app, mode_test_context
-    ):
+    def test_query_to_greeting_to_create(self, page: Page, streamlit_app, mode_test_context):
         """
         Scenario 2: User queries first, then greets, then creates.
 
@@ -74,12 +66,8 @@ class TestModeSwitchingUI:
 
         # Step 1: Query tasks
         mode_test_context.send_message("What tasks do I have?")
-        assert (
-            mode_test_context.has_task_list()
-        ), "Expected task list for 'What tasks do I have?'"
-        assert (
-            not mode_test_context.has_error_message()
-        ), "Should not error on task query"
+        assert mode_test_context.has_task_list(), "Expected task list for 'What tasks do I have?'"
+        assert not mode_test_context.has_error_message(), "Should not error on task query"
 
         # Step 2: Greeting
         mode_test_context.send_message("Good morning")
@@ -89,9 +77,7 @@ class TestModeSwitchingUI:
         mode_test_context.send_message("Call dentist at 2pm")
         assert mode_test_context.has_task_preview(), "Expected task creation preview"
 
-    def test_multiple_retrieve_patterns(
-        self, page: Page, streamlit_app, mode_test_context
-    ):
+    def test_multiple_retrieve_patterns(self, page: Page, streamlit_app, mode_test_context):
         """
         Scenario 3: Various retrieve patterns in sequence.
 
@@ -122,9 +108,7 @@ class TestModeSwitchingUI:
                 not mode_test_context.has_error_message()
             ), f"Query '{query}' should not cause parsing error"
 
-    def test_create_not_triggered_by_queries(
-        self, page: Page, streamlit_app, mode_test_context
-    ):
+    def test_create_not_triggered_by_queries(self, page: Page, streamlit_app, mode_test_context):
         """
         Scenario 4: Ensure queries don't trigger task creation.
 
@@ -152,17 +136,13 @@ class TestModeSwitchingUI:
                 not mode_test_context.has_task_preview()
             ), f"Query '{query}' should NOT trigger task creation"
             # Should see task list
-            assert (
-                mode_test_context.has_task_list()
-            ), f"Query '{query}' should show task list"
+            assert mode_test_context.has_task_list(), f"Query '{query}' should show task list"
             # Should NOT see error (this was the original bug)
             assert (
                 not mode_test_context.has_error_message()
             ), f"Query '{query}' should not cause LLM parsing error"
 
-    def test_edge_case_my_task_is_to(
-        self, page: Page, streamlit_app, mode_test_context
-    ):
+    def test_edge_case_my_task_is_to(self, page: Page, streamlit_app, mode_test_context):
         """
         Edge case: "My task is to..." should be CREATE not RETRIEVE.
 
@@ -176,17 +156,13 @@ class TestModeSwitchingUI:
         assert (
             mode_test_context.has_task_preview()
         ), "'My task is to...' should trigger CREATE and show task preview"
-        assert (
-            not mode_test_context.has_error_message()
-        ), "Should not error on task creation"
+        assert not mode_test_context.has_error_message(), "Should not error on task creation"
 
 
 class TestModeSwitchingEdgeCases:
     """Additional edge cases for mode switching."""
 
-    def test_todo_variations_all_retrieve(
-        self, page: Page, streamlit_app, mode_test_context
-    ):
+    def test_todo_variations_all_retrieve(self, page: Page, streamlit_app, mode_test_context):
         """
         Test todo/to-do/list variations all trigger RETRIEVE.
 
@@ -206,16 +182,10 @@ class TestModeSwitchingEdgeCases:
 
         for query in variations:
             mode_test_context.send_message(query)
-            assert (
-                mode_test_context.has_task_list()
-            ), f"'{query}' should trigger RETRIEVE"
-            assert (
-                not mode_test_context.has_error_message()
-            ), f"'{query}' should not error"
+            assert mode_test_context.has_task_list(), f"'{query}' should trigger RETRIEVE"
+            assert not mode_test_context.has_error_message(), f"'{query}' should not error"
 
-    def test_create_with_task_word_not_confused(
-        self, page: Page, streamlit_app, mode_test_context
-    ):
+    def test_create_with_task_word_not_confused(self, page: Page, streamlit_app, mode_test_context):
         """
         Ensure CREATE mode works even when message contains word 'task'.
 
@@ -235,6 +205,4 @@ class TestModeSwitchingEdgeCases:
             assert (
                 mode_test_context.has_task_preview()
             ), f"'{command}' should trigger CREATE even though it contains 'task'"
-            assert (
-                not mode_test_context.has_error_message()
-            ), f"'{command}' should not error"
+            assert not mode_test_context.has_error_message(), f"'{command}' should not error"

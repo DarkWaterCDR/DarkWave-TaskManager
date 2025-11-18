@@ -83,9 +83,7 @@ class Settings:
         """
         # Validate API token format (basic check)
         if len(self.todoist_api_token) < 20:
-            raise ConfigurationError(
-                "TODOIST_API_TOKEN appears to be invalid (too short)"
-            )
+            raise ConfigurationError("TODOIST_API_TOKEN appears to be invalid (too short)")
 
         if len(self.google_api_key) < 20:
             raise ConfigurationError("GOOGLE_API_KEY appears to be invalid (too short)")
