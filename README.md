@@ -32,7 +32,11 @@ Bellevue University Capstone Project.  Integrating LLM with Todoist API for natu
 ### 1. Clone and Setup
 
 ```powershell
-cd "d:\Developer\bellevue\project three"
+git clone git@github.com:DarkWaterCDR/DarkWave-TaskManager.git
+```
+
+```powershell
+cd DarkWave-TaskManager
 ```
 
 ### 2. Install uv (recommended)
